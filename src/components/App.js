@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import Home from './home';
+import Home from './Home';
 import AddNewUser from './AddNewUser';
 import {BrowserRouter as Router,  Route } from 'react-router-dom';
 class App extends Component{

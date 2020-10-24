@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { get } from "lodash";
+
 import { ADD_USER, 
     ADD_USER_ERROR,
     LOADING,
@@ -9,7 +11,8 @@ import { ADD_USER,
     GET_USERS,     
     GET_USERS_ERROR,
     VALID_NEW_USER,
-    INPUT_ERROR
+    INPUT_ERROR,
+    SET_SORT_PARAMS
 } from './actionTypes';
 
 const apiUrl = 'http://localhost:8000/api/';
@@ -22,6 +25,37 @@ export const addUser = (user) => {
     }
 };
 
+export const setSortParams = (sortKey, sortType = "string", order) => {
+    //const { sortParams } = getState().app;
+    //const order = get(sortParams, "order");
+    return {
+        type: SET_SORT_PARAMS,
+        payload: {
+          data: {
+            key: sortKey,
+            type: sortType,
+            order
+          }
+        }
+    }
+};
+/*
+export function setSortParams(sortKey, sortType) {
+    return (dispatch, getState) => {
+      
+      dispatch({
+        type: SET_SORT_PARAMS,
+        payload: {
+          data: {
+            key: sortKey,
+            order: order === "desc" ? "asc" : "desc",
+            type: sortType
+          }
+        }
+      });
+    };
+  }
+*/
 export const deleteUser = (id) => async dispatch => {
     try{
         dispatch(loading());
@@ -67,8 +101,6 @@ export const loading = () => {
         type: LOADING
     }
 }
-
-
 
 export const validatedInput = () => {
     console.log("validated");

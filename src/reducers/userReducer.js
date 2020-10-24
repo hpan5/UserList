@@ -6,12 +6,18 @@ import { ADD_USER,
     EDIT_USER_ERROR,
     GET_USERS,     
     GET_USERS_ERROR,
-    LOADING
+    LOADING,
+    SET_SORT_PARAMS
 } from '../actions/actionTypes';
 
 const initialState = {
     users : [],
-    loading: false
+    loading: false,
+    sortParams: {
+        key : "first_name",
+        order : "asc",
+        type : "string"
+    }
 }
 
 const userReducer = (state = initialState, action) => {
@@ -26,7 +32,10 @@ const userReducer = (state = initialState, action) => {
         case DELETE_USER : 
             console.log("deleting");
             const filteredUsers = state.users.filter(user => user.id !== action.id)
-            return {...state, users: filteredUsers}
+            return {...state, users: filteredUsers, loading:false}
+        case SET_SORT_PARAMS:
+            action.payload.data.order = state.sortParams.order === "desc" ? "asc" : "desc";
+          return { ...state, sortParams: action.payload.data };
         default:
             return state;
     }
