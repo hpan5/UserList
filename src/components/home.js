@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getSortedUsersList, sortSelector } from "../selectors";
 import * as actionCreator from '../actions/actions';
-
+import TableBody from './Users';
+import Pagination from './Pagination';
 const Button = props => {
     return (
       <button
@@ -24,11 +25,9 @@ class Home extends Component{
         this.props.onLoad();
 	}
 	render(){
-		const users = this.props.users;
-		console.log(users.length);
-		console.log("sortParams", this.props.sortParams);
+		//console.log("sortParams", this.props.sortParams);
 		return(
-				<div className = "App">
+				<div className = 'container mt-5'>
 					<table>
 						<thead>
 							<tr>
@@ -37,24 +36,15 @@ class Home extends Component{
 								<th onClick={() => this.props.setSortParams("first_name", this.props.sortParams.order)}>First Name</th>
 								<th onClick={() => this.props.setSortParams("last_name", this.props.sortParams.order)}>Last Name</th>
 								<th onClick={() => this.props.setSortParams("sex", this.props.sortParams.order)}>Sex</th>
-								<th onClick={() => this.props.setSortParams("age", this.props.sortParams.order)}>Age</th>
+								<th onClick={() => this.props.setSortParams("age", this.props.sortParams.order, "number")}>Age</th>
 							</tr>
-							<tbody>
-								{this.props.users.map((user, i) => 
-									<tr className="users" key={user.id}>
-										<button onClick={() => this.props.onDelete(user.id)}>delete</button>
-										<button>edit</button>
-										<td> {user.first_name} </td>
-										<td> {user.last_name} </td>
-										<td> {user.sex} </td>
-										<td> {user.age} </td>
-									</tr>
-								)}
-							</tbody>
 						</thead>
+						<TableBody/>
 					</table>
-					<WithRouterButton/>
 					{this.props.loading && <p>LOADING!!!!</p>}
+					<Pagination/>
+					<WithRouterButton/>
+					
 				</div>
 			
 		);
@@ -62,10 +52,11 @@ class Home extends Component{
 }
 const mapStateToProps = (state) => {
 	return {
-		users: state.list.users,
 		loading: state.list.loading,
 		sortParams: sortSelector(state),
 		userList: getSortedUsersList(state),
+		usersPerPage: state.list.usersPerPage,
+		currentPage: state.list.currentPage
 	}
 }
 
@@ -74,7 +65,7 @@ const mapDispatchToProps = (dispatch) => {
 		onCreate: () => dispatch(actionCreator.addUser()),
 		onLoad: () => dispatch(actionCreator.getUsers()),
 		onDelete: (id) => dispatch(actionCreator.deleteUser(id)),
-		setSortParams: () => dispatch(actionCreator.setSortParams())
+		setSortParams: (key, order, type = "string") => dispatch(actionCreator.setSortParams(key, order, type))
 	};
 }
 export default connect(mapStateToProps, mapDispatchToProps) (Home);

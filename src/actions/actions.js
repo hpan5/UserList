@@ -10,24 +10,33 @@ import { ADD_USER,
     EDIT_USER_ERROR,
     GET_USERS,     
     GET_USERS_ERROR,
-    VALID_NEW_USER,
-    INPUT_ERROR,
-    SET_SORT_PARAMS
+    SET_SORT_PARAMS,
+    PAGENATION,
+    EDITING_USER
 } from './actionTypes';
 
 const apiUrl = 'http://localhost:8000/api/';
 
-export const addUser = (user) => {
-    console.log(user);
-    return {
-        type: ADD_USER,
-        payload: user
+export const addUser = (user) => async dispatch => {
+    try{
+        //console.log(user);
+        await axios.post(apiUrl + 'post/', user). then(response => {
+            console.log(response);
+        });
+        dispatch( {
+            type: ADD_USER,
+            payload: user
+        })
+    }
+    catch(e){
+        dispatch( {
+            type: ADD_USER_ERROR,
+            payload: console.log(e),
+        })
     }
 };
 
-export const setSortParams = (sortKey, sortType = "string", order) => {
-    //const { sortParams } = getState().app;
-    //const order = get(sortParams, "order");
+export const setSortParams = (sortKey, order, sortType = "string") => {
     return {
         type: SET_SORT_PARAMS,
         payload: {
@@ -39,27 +48,18 @@ export const setSortParams = (sortKey, sortType = "string", order) => {
         }
     }
 };
-/*
-export function setSortParams(sortKey, sortType) {
-    return (dispatch, getState) => {
-      
-      dispatch({
-        type: SET_SORT_PARAMS,
-        payload: {
-          data: {
-            key: sortKey,
-            order: order === "desc" ? "asc" : "desc",
-            type: sortType
-          }
-        }
-      });
-    };
-  }
-*/
+
+export const paginate = (pageNum) => {
+    //console.log("current page " + pageNum);
+    return {
+        type: PAGENATION,
+        pageNum: pageNum
+    }
+}
 export const deleteUser = (id) => async dispatch => {
     try{
         dispatch(loading());
-        console.log(id);
+        //console.log(id);
         await axios.delete(apiUrl + 'delete/' + id ). then(response => {
             console.log(response);
         });
@@ -77,11 +77,33 @@ export const deleteUser = (id) => async dispatch => {
     }
 };
 
+export const editUser = (id, user) => async dispatch => {
+    //console.log("heloooooooooooooo");
+    try{
+        console.log("url " + apiUrl + 'update/' + id);
+        console.log("editing user : " + user);
+        //await axios.post(apiUrl + 'post/', user)
+        await axios.patch(apiUrl + 'update/' + id, user). then(response => {
+            console.log(response);
+        });
+        dispatch( {
+            type: EDIT_USER,
+            id: id
+        })
+    }
+    catch(e){
+        dispatch( {
+            type: EDIT_USER_ERROR,
+            payload: console.log(e),
+        })
+    }
+};
+
 export const getUsers = (users) => async dispatch => {
     try{
         dispatch(loading());
         const res = await axios.get(apiUrl + 'posts' )
-        console.log(res.data);
+        //console.log(res.data);
         dispatch( {
             type: GET_USERS,
             payload: res.data
@@ -101,17 +123,9 @@ export const loading = () => {
         type: LOADING
     }
 }
-
-export const validatedInput = () => {
-    console.log("validated");
+export const startEdit = (user) => {
     return {
-        type: VALID_NEW_USER
+        type: EDITING_USER,
+        editingUser: user
     }
-}
-
-export const createErrors = (errors) => {
-    return {
-        type: INPUT_ERROR,
-        errors: errors
-    }
-}
+};

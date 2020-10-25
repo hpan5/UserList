@@ -1,45 +1,101 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
+import {connect} from 'react-redux';
 
 let UserForm = (props) => {
-  const { handleSubmit } = props
+  const { handleSubmit, valid} = props
   return (
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="first_name">First Name</label>
-        <Field name="first_name" component="input" type="text" />
+        <Field name="first_name" id="first-name" component={newField} type="text" />
       </div>
       <div>
         <label htmlFor="last_name">Last Name</label>
-        <Field name="last_name" component="input" type="text" />
+        <Field name="last_name" id="last_name" component={newField} type="text" />
       </div>
       <div>
         <label htmlFor="sex">Sex</label>
-        <Field name="sex" component="input" type="text" />
+        <Field name="sex" id="sex" component={newField} type="text" />
       </div>
       <div>
         <label htmlFor="age">Age</label>
-        <Field name="age" component="input" type="text" />
+        <Field name="age" id="age" component={newField} type="text" />
       </div>
       <div>
         <label htmlFor="password">Password</label>
-        <Field name="password" component="input" type="text" />
+        <Field name="password" id="password" component={newField} type="password" />
       </div>
       <div>
         <label htmlFor="repeat">Repeat</label>
-        <Field name="repeat" component="input" type="text" />
+        <Field name="repeat" id="repeat" component={newField} type="password" />
       </div>
-      <button type="submit">Submit</button>
+  <button type="submit" disabled={!valid}>{props.editingUser === {} ? "Save Changes" : "Add New User"}</button>
     </form>
   )
 }
 
+const myValidator = values => {
+  const errors = {};
+  if (!values.first_name) {
+    errors.first_name = 'First name is required';
+  } else if (values.first_name.length < 3) {
+    errors.firstName = "Your name can't be that short!";
+  }
+  if (!values.last_name) {
+    errors.last_name = 'Last name is required';
+  }
+  if (!values.sex) {
+    errors.sex = 'Sex is required';
+  }
+  if (!values.password) {
+    errors.password = 'password is required';
+  }
+  if (!values.repeat) {
+    errors.repeat = 'Repeated password is required';
+  }
+  if (values.password !== values.repeat) {
+    errors.repeat = 'passwords do not match';
+  }
+
+  return errors;
+};
+
+const newField = ({
+  input,
+  type,
+  placeholder,
+  id,
+  meta: { touched, error },
+  ...rest
+}) => {
+  return (
+    <div>
+      <input {...input} placeholder={placeholder} type={type} id={id} />
+      {touched && error && <p style={{ color: 'red' }}>{error}</p>}
+    </div>
+  );
+};
+
 UserForm = reduxForm({
   // a unique name for the form
-  form: 'user'
+  form: 'user',
+  validate: myValidator
 })(UserForm)
 
-export default UserForm
+UserForm = connect(
+  state => ({
+    initialValues: state.list.editingUser, // pull initial values from account reducer
+  })
+)(UserForm);
+
+const mapStateToProps = (state) => {
+  return {
+      editingUser: state.list.editingUser
+  }
+}
+
+export default connect(mapStateToProps) (UserForm);
 
 
 /*

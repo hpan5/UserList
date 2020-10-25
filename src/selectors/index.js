@@ -14,6 +14,7 @@ function orderByType(data, type) {
     }
 }
 
+
 export const getSortedUsersList = createSelector (
     usersSelector,
     sortSelector,
