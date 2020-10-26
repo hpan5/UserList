@@ -20,3 +20,5 @@ export const SET_SORT_PARAMS = "SET_SORT_PARAMS"
 export const SEARCH_USERS = "SEARCH_USERS"
 
 export const PAGENATION = "PAGENATION"
+
+export const CHANGE_USERS_NUM = "CHANGE_USERS_NUM"

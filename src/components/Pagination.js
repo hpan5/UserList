@@ -26,7 +26,7 @@ const Pagination = ({totalUsers, usersPerPage, paginate}) => {
 const mapStateToProps = (state, props) => {
     return {
         usersPerPage: state.list.usersPerPage,
-        totalUsers: state.list.users.length
+        totalUsers: state.list.filteredUsersNum
     }
 }
 

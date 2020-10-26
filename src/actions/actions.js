@@ -12,7 +12,8 @@ import { ADD_USER,
     SET_SORT_PARAMS,
     PAGENATION,
     EDITING_USER,
-    SEARCH_USERS
+    SEARCH_USERS,
+    CHANGE_USERS_NUM
 } from './actionTypes';
 
 const apiUrl = 'http://localhost:8000/api/';
@@ -36,25 +37,19 @@ export const addUser = (user) => async dispatch => {
     }
 };
 
-export const search = (value) => async dispatch => {
-    try{
-        dispatch(loading());
-        const res = await axios.get(apiUrl + 'posts' )
-        console.log("search users called:" + res.data);
-        dispatch( {
-            type: SEARCH_USERS,
-            payload: res.data,
-            value: value
-        })
-    }
-    catch(e){
-        dispatch( {
-            type: GET_USERS_ERROR,
-            payload: console.log(e),
-        })
+export const search = (value) => {
+    return {
+        type: SEARCH_USERS,
+        value: value
     }
 };
 
+export const changeUserNum = (num) => {
+    return {
+        type : CHANGE_USERS_NUM,
+        userNum : num
+    }
+}
 
 export const setSortParams = (sortKey, order, sortType = "string") => {
     return {

@@ -11,7 +11,8 @@ import { ADD_USER,
     LOADING,
     SET_SORT_PARAMS,
     PAGENATION,
-    SEARCH_USERS
+    SEARCH_USERS,
+    CHANGE_USERS_NUM
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -25,14 +26,15 @@ const initialState = {
     usersPerPage: 7,
     currentPage: 1,
     editingUser: {},
-    searchTerm: ""
+    searchTerm: "",
+    filteredUsersNum: 0
     
 }
 
 const userReducer = (state = initialState, action) => {
     switch(action.type) {
         case ADD_USER : 
-            return {...state, users:[...state.users, action.payload], loading:false, editingUser: {}}
+            return {...state, users:[...state.users, action.payload], loading:false, editingUser: {}, filteredUsersNum : state.users.length}
         case GET_USERS : 
             //console.log(action.payload);
             return {...state, users:[...action.payload], loading:false}
@@ -41,7 +43,7 @@ const userReducer = (state = initialState, action) => {
         case DELETE_USER : 
             //console.log("deleting");
             const filteredUsers = state.users.filter(user => user.id !== action.id)
-            return {...state, users: filteredUsers, loading:false}
+            return {...state, users: filteredUsers, loading:false, filteredUsersNum : filteredUsers.length}
         case SET_SORT_PARAMS:
             action.payload.data.order = state.sortParams.order === "desc" ? "asc" : "desc";
           return { ...state, sortParams: action.payload.data, editingUser: {} };
@@ -52,12 +54,9 @@ const userReducer = (state = initialState, action) => {
         case EDIT_USER:
             return {...state, editingUser: {}};
         case SEARCH_USERS:
-            console.log("search user state: " + state.users);
-            console.log("value to be searched: " + action.value)
-            const searchedUsers = state.users.filter((user => 
-                (user.first_name.toLowerCase().includes(action.value.toLowerCase()) || user.last_name.toLowerCase().includes(action.value.toLowerCase())))
-                );
             return {...state, searchTerm: action.value, loading: false}
+        case CHANGE_USERS_NUM:
+            return {...state, filteredUsersNum: action.userNum}
         default:
             return state;
     }
