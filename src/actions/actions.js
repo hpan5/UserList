@@ -71,10 +71,10 @@ export const paginate = (pageNum) => {
         pageNum: pageNum
     }
 }
+
 export const deleteUser = (id) => async dispatch => {
     try{
         dispatch(loading());
-        //console.log(id);
         await axios.delete(apiUrl + 'delete/' + id ). then(response => {
             console.log(response);
         });
@@ -82,7 +82,6 @@ export const deleteUser = (id) => async dispatch => {
             type: DELETE_USER,
             id: id
         })
-        //getUsers();
     }
     catch(e){
         dispatch( {
@@ -93,13 +92,11 @@ export const deleteUser = (id) => async dispatch => {
 };
 
 export const editUser = (id, user) => async dispatch => {
-    //console.log("heloooooooooooooo");
     try{
-        //console.log("url " + apiUrl + 'update/' + id);
-        //console.log("editing user : " + user);
         await axios.patch(apiUrl + 'update/' + id, user). then(response => {
             console.log(response);
         });
+        await getUsers();
         dispatch( {
             type: EDIT_USER,
             id: id
@@ -117,7 +114,6 @@ export const getUsers = () => async dispatch => {
     try{
         dispatch(loading());
         const res = await axios.get(apiUrl + 'posts' )
-        console.log("get users called:" + res.data);
         dispatch( {
             type: GET_USERS,
             payload: res.data
