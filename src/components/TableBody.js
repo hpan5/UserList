@@ -10,7 +10,12 @@ const TableBody = ({ userList, usersPerPage, currentPage, onDelete, searchTerm, 
     console.log(userList);
     let filteredUserList = userList;
     if (searchTerm !== "") {
-        filteredUserList = userList.filter((user) => (user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) || user.last_name.toLowerCase().includes(searchTerm.toLowerCase())));
+        filteredUserList = userList.filter((user) => (
+            user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+            user.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.sex.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.age.includes(searchTerm)
+        ));
     }
     changeUserNum(filteredUserList.length);
     console.log("filteredList: " + filteredUserList);
@@ -33,7 +38,7 @@ const TableBody = ({ userList, usersPerPage, currentPage, onDelete, searchTerm, 
     );
   }
 
-  
+
 const mapStateToProps = (state) => {
     return {
         userList: getSortedUsersList(state),
