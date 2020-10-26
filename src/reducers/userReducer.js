@@ -1,3 +1,4 @@
+import { startEdit } from '../actions/actions';
 import { ADD_USER, 
     ADD_USER_ERROR,
     DELETE_USER,       
@@ -9,7 +10,8 @@ import { ADD_USER,
     GET_USERS_ERROR,
     LOADING,
     SET_SORT_PARAMS,
-    PAGENATION
+    PAGENATION,
+    SEARCH_USERS
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -22,7 +24,8 @@ const initialState = {
     },
     usersPerPage: 7,
     currentPage: 1,
-    editingUser: {}
+    editingUser: {},
+    searchTerm: ""
     
 }
 
@@ -31,7 +34,7 @@ const userReducer = (state = initialState, action) => {
         case ADD_USER : 
             return {...state, users:[...state.users, action.payload], loading:false, editingUser: {}}
         case GET_USERS : 
-            console.log(action.payload);
+            //console.log(action.payload);
             return {...state, users:[...action.payload], loading:false}
         case LOADING : 
             return {...state, loading:true}
@@ -48,6 +51,13 @@ const userReducer = (state = initialState, action) => {
             return {...state, editingUser: action.editingUser};
         case EDIT_USER:
             return {...state, editingUser: {}};
+        case SEARCH_USERS:
+            console.log("search user state: " + state.users);
+            console.log("value to be searched: " + action.value)
+            const searchedUsers = state.users.filter((user => 
+                (user.first_name.toLowerCase().includes(action.value.toLowerCase()) || user.last_name.toLowerCase().includes(action.value.toLowerCase())))
+                );
+            return {...state, searchTerm: action.value, loading: false}
         default:
             return state;
     }

@@ -17,4 +17,6 @@ export const VALID_NEW_USER = "VALID_NEW_USER"
 export const INPUT_ERROR = "INPUT_ERROR"
 export const SET_SORT_PARAMS = "SET_SORT_PARAMS"
 
+export const SEARCH_USERS = "SEARCH_USERS"
+
 export const PAGENATION = "PAGENATION"

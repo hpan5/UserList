@@ -31,6 +31,6 @@ const mapDispatchToProps = (dispatch) => {
 	return {
         onCreate: (user) => dispatch(actionCreator.addUser(user))
 	};
-  
 }
+
 export default connect(mapStateToProps, mapDispatchToProps) (AddNewUser);

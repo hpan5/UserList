@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { get } from "lodash";
 
 import { ADD_USER, 
     ADD_USER_ERROR,
@@ -12,7 +11,8 @@ import { ADD_USER,
     GET_USERS_ERROR,
     SET_SORT_PARAMS,
     PAGENATION,
-    EDITING_USER
+    EDITING_USER,
+    SEARCH_USERS
 } from './actionTypes';
 
 const apiUrl = 'http://localhost:8000/api/';
@@ -36,6 +36,26 @@ export const addUser = (user) => async dispatch => {
     }
 };
 
+export const search = (value) => async dispatch => {
+    try{
+        dispatch(loading());
+        const res = await axios.get(apiUrl + 'posts' )
+        console.log("search users called:" + res.data);
+        dispatch( {
+            type: SEARCH_USERS,
+            payload: res.data,
+            value: value
+        })
+    }
+    catch(e){
+        dispatch( {
+            type: GET_USERS_ERROR,
+            payload: console.log(e),
+        })
+    }
+};
+
+
 export const setSortParams = (sortKey, order, sortType = "string") => {
     return {
         type: SET_SORT_PARAMS,
@@ -50,7 +70,7 @@ export const setSortParams = (sortKey, order, sortType = "string") => {
 };
 
 export const paginate = (pageNum) => {
-    //console.log("current page " + pageNum);
+    console.log("current page " + pageNum);
     return {
         type: PAGENATION,
         pageNum: pageNum
@@ -99,11 +119,11 @@ export const editUser = (id, user) => async dispatch => {
     }
 };
 
-export const getUsers = (users) => async dispatch => {
+export const getUsers = () => async dispatch => {
     try{
         dispatch(loading());
         const res = await axios.get(apiUrl + 'posts' )
-        //console.log(res.data);
+        console.log("get users called:" + res.data);
         dispatch( {
             type: GET_USERS,
             payload: res.data

@@ -5,12 +5,17 @@ import {connect} from 'react-redux';
 import { useHistory } from "react-router-dom";
 
 
-const TableBody = ({ userList, usersPerPage, currentPage, onDelete}) => {
+const TableBody = ({ userList, usersPerPage, currentPage, onDelete, searchTerm}) => {
     let history = useHistory();
     console.log(userList);
+    let filteredUserList = userList;
+    if (searchTerm !== "") {
+        filteredUserList = userList.filter((user) => (user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) || user.last_name.toLowerCase().includes(searchTerm.toLowerCase())));
+    }
+    console.log("filteredList: " + filteredUserList);
     let indexOfLastUser = currentPage * usersPerPage;
     let indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const userSlice = userList.slice(indexOfFirstUser, indexOfLastUser);
+    const userSlice = filteredUserList.slice(indexOfFirstUser, indexOfLastUser);
     return (
         <tbody>
             {userSlice.map((user, i) => 
@@ -32,7 +37,8 @@ const mapStateToProps = (state) => {
     return {
         userList: getSortedUsersList(state),
         usersPerPage: state.list.usersPerPage,
-        currentPage: state.list.currentPage
+        currentPage: state.list.currentPage,
+        searchTerm : state.list.searchTerm
     }
 }
 

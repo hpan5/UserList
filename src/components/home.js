@@ -6,6 +6,8 @@ import { getSortedUsersList, sortSelector } from "../selectors";
 import * as actionCreator from '../actions/actions';
 import TableBody from './Users';
 import Pagination from './Pagination';
+import Search from '../containers/Seach'
+
 const Button = props => {
     return (
       <button
@@ -28,6 +30,7 @@ class Home extends Component{
 		//console.log("sortParams", this.props.sortParams);
 		return(
 				<div className = 'container mt-5'>
+					<Search/>
 					<table>
 						<thead>
 							<tr>
@@ -69,15 +72,3 @@ const mapDispatchToProps = (dispatch) => {
 	};
 }
 export default connect(mapStateToProps, mapDispatchToProps) (Home);
-/*
-{this.props.users.map((user, i) => 
-							<ul className="users" key={i}>
-								<button onClick={() => this.props.onDelete(user.id)}>delete</button>
-								<button>edit</button>
-								<li key="fn"> {user.first_name} </li>
-								<li key="ln"> {user.last_name} </li>
-								<li key="se"> {user.sex} </li>
-								<li key="ag"> {user.age} </li>
-							</ul>
-						)}
-*/ 

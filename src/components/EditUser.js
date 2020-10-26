@@ -15,13 +15,10 @@ const findUserById = (users, id) => {
 const EditUser = (props) => {
     
     let id = props.match.params.id;
-    console.log(id);
+    //console.log(id);
     let user = findUserById(props.users, id);
-    console.log("hi user: " + user);
+    //console.log("hi user: " + user);
     props.startEdit(user);
-    useEffect(() => {
-        
-    }, []);
     
     const submit = (user) => {
         props.onDelete(id);
