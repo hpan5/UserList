@@ -1,9 +1,20 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 import {connect} from 'react-redux';
+/*
+let { handleSubmit, valid} = props
+  let [submissionString, setSubmissionString] = useState("Add New User");
+  useEffect(() => {
+    console.log(submissionString);
+    setSubmissionString((props.editingUser === {} || props.editingUser === window.undefined) ? "Add New User" : "Save Changes")
+  }, [])
 
+*/
 let UserForm = (props) => {
-  const { handleSubmit, valid} = props
+  const { handleSubmit, valid, reset} = props
+  let submissionString = (props.editingUser === undefined) ? "Add New User" : "Save Changes";
+  console.log("editing user: " , props.editingUser);
+  console.log(submissionString);
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -30,7 +41,7 @@ let UserForm = (props) => {
         <label htmlFor="repeat">Repeat</label>
         <Field name="repeat" id="repeat" component={newField} type="password" />
       </div>
-  <button type="submit" disabled={!valid}>{props.editingUser === {} ? "Save Changes" : "Add New User"}</button>
+  <button type="submit" disabled={!valid}>{ submissionString }</button>
     </form>
   )
 }
@@ -80,20 +91,23 @@ const newField = ({
 UserForm = reduxForm({
   // a unique name for the form
   form: 'user',
-  validate: myValidator
+  validate: myValidator,
+  enableReinitialize: true
 })(UserForm)
 
+const mapStateToProps = (state) => {
+  return {
+      editingUser: state.list.editingUser,
+      initialValues: state.list.editingUser === undefined ? {} : state.list.editingUser
+  }
+}
+/*
 UserForm = connect(
   state => ({
     initialValues: state.list.editingUser, // pull initial values from account reducer
   })
 )(UserForm);
-
-const mapStateToProps = (state) => {
-  return {
-      editingUser: state.list.editingUser
-  }
-}
+*/
 
 export default connect(mapStateToProps) (UserForm);
 

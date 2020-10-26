@@ -1,17 +1,18 @@
 import React,{Component} from 'react';
-import './App.css';
+import './Home.css';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getSortedUsersList, sortSelector } from "../selectors";
 import * as actionCreator from '../actions/actions';
-import TableBody from './Users';
+import TableBody from './TableBody';
 import Pagination from './Pagination';
 import Search from '../containers/Seach'
-
 const Button = props => {
+	
     return (
       <button
         onClick={() => {
+			console.log("editing users: " + props.editingUser);
           props.history.push('/createUser');
         }}>
         Create New User
@@ -27,7 +28,6 @@ class Home extends Component{
         this.props.onLoad();
 	}
 	render(){
-		//console.log("sortParams", this.props.sortParams);
 		return(
 				<div className = 'container mt-5'>
 					<Search/>
@@ -36,10 +36,10 @@ class Home extends Component{
 							<tr>
 								<th>Edit</th>
 								<th>Delete</th>
-								<th onClick={() => this.props.setSortParams("first_name", this.props.sortParams.order)}>First Name</th>
-								<th onClick={() => this.props.setSortParams("last_name", this.props.sortParams.order)}>Last Name</th>
-								<th onClick={() => this.props.setSortParams("sex", this.props.sortParams.order)}>Sex</th>
-								<th onClick={() => this.props.setSortParams("age", this.props.sortParams.order, "number")}>Age</th>
+								<th onClick={() => this.props.setSortParams("first_name", this.props.sortParams.order)} class="header">First Name</th>
+								<th onClick={() => this.props.setSortParams("last_name", this.props.sortParams.order)} class="header">Last Name</th>
+								<th onClick={() => this.props.setSortParams("sex", this.props.sortParams.order)} class="header">Sex</th>
+								<th onClick={() => this.props.setSortParams("age", this.props.sortParams.order, "number")} class="header">Age</th>
 							</tr>
 						</thead>
 						<TableBody/>
@@ -59,7 +59,8 @@ const mapStateToProps = (state) => {
 		sortParams: sortSelector(state),
 		userList: getSortedUsersList(state),
 		usersPerPage: state.list.usersPerPage,
-		currentPage: state.list.currentPage
+		currentPage: state.list.currentPage,
+		editingUser: state.list.editingUser
 	}
 }
 

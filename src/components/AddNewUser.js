@@ -16,21 +16,17 @@ class AddNewUser extends Component {
     render() {
         return (
             <div>
+                <h2>Add New User:</h2>
                 <UserForm onSubmit={this.submit}/>
             </div>
         );
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        errors: state.newUser.errors
-    }
-}
 const mapDispatchToProps = (dispatch) => {
 	return {
         onCreate: (user) => dispatch(actionCreator.addUser(user))
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) (AddNewUser);
+export default connect(null, mapDispatchToProps) (AddNewUser);

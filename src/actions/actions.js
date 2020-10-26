@@ -16,7 +16,7 @@ import { ADD_USER,
     CHANGE_USERS_NUM
 } from './actionTypes';
 
-const apiUrl = 'http://localhost:8000/api/';
+const apiUrl = '/api/';
 
 export const addUser = (user) => async dispatch => {
     try{
@@ -95,9 +95,8 @@ export const deleteUser = (id) => async dispatch => {
 export const editUser = (id, user) => async dispatch => {
     //console.log("heloooooooooooooo");
     try{
-        console.log("url " + apiUrl + 'update/' + id);
-        console.log("editing user : " + user);
-        //await axios.post(apiUrl + 'post/', user)
+        //console.log("url " + apiUrl + 'update/' + id);
+        //console.log("editing user : " + user);
         await axios.patch(apiUrl + 'update/' + id, user). then(response => {
             console.log(response);
         });

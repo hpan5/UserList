@@ -25,7 +25,7 @@ const initialState = {
     },
     usersPerPage: 7,
     currentPage: 1,
-    editingUser: {},
+    editingUser: undefined,
     searchTerm: "",
     filteredUsersNum: 0
     
@@ -34,10 +34,10 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
     switch(action.type) {
         case ADD_USER : 
-            return {...state, users:[...state.users, action.payload], loading:false, editingUser: {}, filteredUsersNum : state.users.length}
+            return {...state, users:[...state.users, action.payload], loading:false, editingUser: undefined, filteredUsersNum : state.users.length}
         case GET_USERS : 
             //console.log(action.payload);
-            return {...state, users:[...action.payload], loading:false}
+            return {...state, users:[...action.payload], loading:false, editingUser: undefined}
         case LOADING : 
             return {...state, loading:true}
         case DELETE_USER : 
@@ -46,13 +46,13 @@ const userReducer = (state = initialState, action) => {
             return {...state, users: filteredUsers, loading:false, filteredUsersNum : filteredUsers.length}
         case SET_SORT_PARAMS:
             action.payload.data.order = state.sortParams.order === "desc" ? "asc" : "desc";
-          return { ...state, sortParams: action.payload.data, editingUser: {} };
+          return { ...state, sortParams: action.payload.data, editingUser: undefined };
         case PAGENATION:
           return { ...state, currentPage: action.pageNum };
         case EDITING_USER:
             return {...state, editingUser: action.editingUser};
         case EDIT_USER:
-            return {...state, editingUser: {}};
+            return {...state, editingUser: undefined};
         case SEARCH_USERS:
             return {...state, searchTerm: action.value, loading: false}
         case CHANGE_USERS_NUM:

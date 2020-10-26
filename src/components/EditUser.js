@@ -13,7 +13,6 @@ const findUserById = (users, id) => {
 }
 
 const EditUser = (props) => {
-    
     let id = props.match.params.id;
     //console.log(id);
     let user = findUserById(props.users, id);
@@ -21,14 +20,16 @@ const EditUser = (props) => {
     props.startEdit(user);
     
     const submit = (user) => {
-        props.onDelete(id);
+        //props.onDelete(id);
         let norepeat = {...user};
         delete norepeat.repeat;
-        props.onCreate(norepeat);
+        //props.onCreate(norepeat);
+        props.onEdit(id, norepeat);
         props.history.goBack();
     }
     return (
         <div>
+            <h2>Edit User:</h2>
             <UserForm onSubmit={submit}/>
         </div>
     );

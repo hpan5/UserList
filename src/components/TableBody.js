@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import * as actionCreator from '../actions/actions'
 import { getSortedUsersList} from "../selectors";
 import {connect} from 'react-redux';
 import { useHistory } from "react-router-dom";
-
+import './TableBody.css'
 
 const TableBody = ({ userList, usersPerPage, currentPage, onDelete, searchTerm, changeUserNum}) => {
     let history = useHistory();
