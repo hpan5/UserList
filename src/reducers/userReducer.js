@@ -30,7 +30,7 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
     switch(action.type) {
         case ADD_USER : 
-            return {...state, users:[...state.users, action.payload], loading:false, editingUser: undefined, filteredUsersNum : state.users.length, searchTerm: ""}
+            return {...state, users:[...state.users, action.payload], loading:false, editingUser: undefined, filteredUsersNum : state.users.length}
         case GET_USERS : 
             //console.log(action.payload);
             return {...state, users:[...action.payload], loading:false, editingUser: undefined}
@@ -48,7 +48,7 @@ const userReducer = (state = initialState, action) => {
         case EDITING_USER:
             return {...state, editingUser: action.editingUser};
         case EDIT_USER:
-            return {...state, editingUser: undefined, searchTerm: ""};
+            return {...state, editingUser: undefined};
         case SEARCH_USERS:
             return {...state, searchTerm: action.value, loading: false}
         case CHANGE_USERS_NUM:

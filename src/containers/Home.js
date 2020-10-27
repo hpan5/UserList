@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 import { getSortedUsersList, sortSelector } from "../selectors";
 import * as actionCreator from '../actions/actions';
 import TableBody from './TableBody';
-import Pagination from './Pagination';
 import Search from './Seach'
 const Button = props => {
     return (

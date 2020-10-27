@@ -14,10 +14,16 @@ const Search = (props) => {
         <div>
             <form>
                 <label> Search </label>
-                <input type="text" onChange={handleChange}/>
+                <input type="text" onChange={handleChange} value={props.searchTerm}/>
             </form>
         </div>
     )
+}
+
+const mapStateToProps = (state) => {
+    return {
+        searchTerm: state.list.searchTerm
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -28,4 +34,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null, mapDispatchToProps) (Search);
+export default connect(mapStateToProps, mapDispatchToProps) (Search);

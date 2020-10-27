@@ -79,3 +79,10 @@ th.desc::after{
   margin-left: 2px;
 }
 
+.page {
+  text-align: right;
+}
+
+button {
+  margin-right : 3px;
+}
