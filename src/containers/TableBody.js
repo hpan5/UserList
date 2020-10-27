@@ -54,7 +54,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
         onDelete: (id) => dispatch(actionCreator.deleteUser(id)),
-        onEdit: (id, user) => dispatch(actionCreator.editUser(id, user)),
         startEdit: (user) => dispatch(actionCreator.startEdit(user)),
         changeUserNum: (num) => dispatch(actionCreator.changeUserNum(num))
 	};

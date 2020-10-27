@@ -20,6 +20,7 @@ const Button = props => {
   
 const WithRouterButton = withRouter(Button);
 
+
 class Home extends Component{
 	componentDidMount(){
         this.props.onLoad();
@@ -31,8 +32,12 @@ class Home extends Component{
 		}
 		return this.props.sortParams.order;
 	}
-
+	getTotalPageNumber = () => {
+		return Math.ceil(this.props.totalUsers / this.props.usersPerPage);
+	}
 	render(){
+		let currentPage = this.props.currentPage;
+		let pageNum = this.getTotalPageNumber();
 		return(
 				<div className = 'container mt-5'>
 					<Search/>
@@ -51,7 +56,9 @@ class Home extends Component{
 						<TableBody/>
 					</table>
 					{this.props.loading && <p>LOADING!!!!</p>}
-					<Pagination/>
+					<button onClick={() => this.props.paginate(currentPage - 1)} disabled={currentPage === 1}>Prev Page</button>
+            		<button  onClick={() => this.props.paginate(currentPage + 1)} disabled={currentPage === pageNum}>Next Page</button>
+					<p className="page">Page : {currentPage} / {pageNum}</p>
 					<WithRouterButton/>
 					
 				</div>
@@ -67,7 +74,8 @@ const mapStateToProps = (state) => {
 		userList: getSortedUsersList(state),
 		usersPerPage: state.list.usersPerPage,
 		currentPage: state.list.currentPage,
-		editingUser: state.list.editingUser
+		editingUser: state.list.editingUser,
+		totalUsers: state.list.filteredUsersNum
 	}
 }
 
@@ -76,7 +84,8 @@ const mapDispatchToProps = (dispatch) => {
 		onCreate: () => dispatch(actionCreator.addUser()),
 		onLoad: () => dispatch(actionCreator.getUsers()),
 		onDelete: (id) => dispatch(actionCreator.deleteUser(id)),
-		setSortParams: (key, order, type = "string") => dispatch(actionCreator.setSortParams(key, order, type))
+		setSortParams: (key, order, type = "string") => dispatch(actionCreator.setSortParams(key, order, type)),
+		paginate: (number) => dispatch(actionCreator.paginate(number))
 	};
 }
 
