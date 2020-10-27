@@ -2,6 +2,7 @@ import {
     VALID_NEW_USER,
     INPUT_ERROR
 } from '../actions/actionTypes'
+
 const initialState = {
     user : {
         first_name : "",

@@ -1,32 +1,37 @@
 import React,{Component} from 'react';
-import './Home.css';
+import '../Styles/Home.css';
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getSortedUsersList, sortSelector } from "../selectors";
 import * as actionCreator from '../actions/actions';
 import TableBody from './TableBody';
 import Pagination from './Pagination';
-import Search from '../containers/Seach'
+import Search from './Seach'
 const Button = props => {
-	
     return (
       <button
         onClick={() => {
-			console.log("editing users: " + props.editingUser);
-          props.history.push('/createUser');
+			props.history.push('/createUser');
         }}>
         Create New User
       </button>
     );
-  };
+};
   
 const WithRouterButton = withRouter(Button);
-  
 
 class Home extends Component{
 	componentDidMount(){
         this.props.onLoad();
 	}
+
+	getClassName = (name) => {
+		if (this.props.sortParams.key !== name) {
+			return;
+		}
+		return this.props.sortParams.order;
+	}
+
 	render(){
 		return(
 				<div className = 'container mt-5'>
@@ -36,10 +41,11 @@ class Home extends Component{
 							<tr>
 								<th>Edit</th>
 								<th>Delete</th>
-								<th onClick={() => this.props.setSortParams("first_name", this.props.sortParams.order)} class="header">First Name</th>
-								<th onClick={() => this.props.setSortParams("last_name", this.props.sortParams.order)} class="header">Last Name</th>
-								<th onClick={() => this.props.setSortParams("sex", this.props.sortParams.order)} class="header">Sex</th>
-								<th onClick={() => this.props.setSortParams("age", this.props.sortParams.order, "number")} class="header">Age</th>
+		
+								<th onClick={() => this.props.setSortParams("first_name", this.props.sortParams.order)} id="header" className={this.getClassName("first_name")}>First Name</th>
+								<th onClick={() => this.props.setSortParams("last_name", this.props.sortParams.order)} id="header" className={this.getClassName("last_name")}>Last Name</th>
+								<th onClick={() => this.props.setSortParams("sex", this.props.sortParams.order)} id="header" className={this.getClassName("sex")}>Sex</th>
+								<th onClick={() => this.props.setSortParams("age", this.props.sortParams.order, "number")} id="header" className={this.getClassName("age")}>Age</th>
 							</tr>
 						</thead>
 						<TableBody/>
@@ -53,6 +59,7 @@ class Home extends Component{
 		);
 	}
 }
+
 const mapStateToProps = (state) => {
 	return {
 		loading: state.list.loading,
@@ -72,4 +79,5 @@ const mapDispatchToProps = (dispatch) => {
 		setSortParams: (key, order, type = "string") => dispatch(actionCreator.setSortParams(key, order, type))
 	};
 }
+
 export default connect(mapStateToProps, mapDispatchToProps) (Home);

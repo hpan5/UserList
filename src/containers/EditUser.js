@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import UserForm from './UserForm'
 import {connect} from 'react-redux';
 import * as actionCreator from '../actions/actions'
+import '../Styles/AddEditUser.css'
 
 const findUserById = (users, id) => {
     for (let i = 0; i < users.length; i++){
@@ -14,19 +15,17 @@ const findUserById = (users, id) => {
 
 const EditUser = (props) => {
     let id = props.match.params.id;
-    //console.log(id);
     let user = findUserById(props.users, id);
-    //console.log("hi user: " + user);
     props.startEdit(user);
     
     const submit = (user) => {
-        //props.onDelete(id);
         let norepeat = {...user};
         delete norepeat.repeat;
-        //props.onCreate(norepeat);
         props.onEdit(id, norepeat);
+        props.onLoad();
         props.history.goBack();
     }
+    
     return (
         <div>
             <h2>Edit User:</h2>
@@ -46,8 +45,8 @@ const mapDispatchToProps = (dispatch) => {
         onDelete: (id) => dispatch(actionCreator.deleteUser(id)),
         onCreate: (user) => dispatch(actionCreator.addUser(user)),
         onEdit: (id, user) => dispatch(actionCreator.editUser(id, user)),
-        startEdit: (user) => dispatch(actionCreator.startEdit(user))
+        startEdit: (user) => dispatch(actionCreator.startEdit(user)),
+        onLoad: () => dispatch(actionCreator.getUsers())
 	};
-  
 }
 export default connect(mapStateToProps, mapDispatchToProps) (EditUser);

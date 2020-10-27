@@ -1,27 +1,29 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import * as actionCreator from '../actions/actions'
 import { getSortedUsersList} from "../selectors";
 import {connect} from 'react-redux';
 import { useHistory } from "react-router-dom";
-import './TableBody.css'
+import '../Styles/TableBody.css'
 
 const TableBody = ({ userList, usersPerPage, currentPage, onDelete, searchTerm, changeUserNum}) => {
     let history = useHistory();
-    console.log(userList);
     let filteredUserList = userList;
+    console.log("filteredUserList: " ,  filteredUserList);
     if (searchTerm !== "") {
-        filteredUserList = userList.filter((user) => (
-            user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-            user.last_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.sex.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            user.age.includes(searchTerm)
-        ));
+        if (userList) {
+            filteredUserList = userList.filter((user) => (
+                (user !== undefined) && (user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                user.last_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                user.sex.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                user.age.includes(searchTerm))
+            ));
+        }
     }
     changeUserNum(filteredUserList.length);
-    console.log("filteredList: " + filteredUserList);
     let indexOfLastUser = currentPage * usersPerPage;
     let indexOfFirstUser = indexOfLastUser - usersPerPage;
     const userSlice = filteredUserList.slice(indexOfFirstUser, indexOfLastUser);
+    console.log("userSlice: " ,  userSlice);
     return (
         <tbody>
             {userSlice.map((user, i) => 
@@ -57,4 +59,5 @@ const mapDispatchToProps = (dispatch) => {
         changeUserNum: (num) => dispatch(actionCreator.changeUserNum(num))
 	};
 }
+
 export default connect(mapStateToProps, mapDispatchToProps) (TableBody);

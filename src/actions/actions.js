@@ -20,8 +20,7 @@ const apiUrl = '/api/';
 
 export const addUser = (user) => async dispatch => {
     try{
-        //console.log(user);
-        await axios.post(apiUrl + 'post/', user). then(response => {
+        await axios.post(apiUrl + 'post/', user).then(response => {
             console.log(response);
         });
         dispatch( {
@@ -75,7 +74,7 @@ export const paginate = (pageNum) => {
 export const deleteUser = (id) => async dispatch => {
     try{
         dispatch(loading());
-        await axios.delete(apiUrl + 'delete/' + id ). then(response => {
+        await axios.delete(apiUrl + 'delete/' + id ).then(response => {
             console.log(response);
         });
         dispatch( {
@@ -93,10 +92,13 @@ export const deleteUser = (id) => async dispatch => {
 
 export const editUser = (id, user) => async dispatch => {
     try{
-        await axios.patch(apiUrl + 'update/' + id, user). then(response => {
+        await axios.patch(apiUrl + 'update/' + id, user).then(response => async dispatch => {
+            console.log("user editted");
+            await getUsers();
+            console.log("user reloaded");
             console.log(response);
         });
-        await getUsers();
+        
         dispatch( {
             type: EDIT_USER,
             id: id
@@ -114,6 +116,8 @@ export const getUsers = () => async dispatch => {
     try{
         dispatch(loading());
         const res = await axios.get(apiUrl + 'posts' )
+        
+        console.log("getting users:", res.data);
         dispatch( {
             type: GET_USERS,
             payload: res.data

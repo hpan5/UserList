@@ -1,13 +1,9 @@
-import { startEdit } from '../actions/actions';
-import { ADD_USER, 
-    ADD_USER_ERROR,
+import { 
+    ADD_USER, 
     DELETE_USER,       
-    DELETE_USER_ERROR,
     EDITING_USER,
     EDIT_USER,
-    EDIT_USER_ERROR,
     GET_USERS,     
-    GET_USERS_ERROR,
     LOADING,
     SET_SORT_PARAMS,
     PAGENATION,
@@ -19,7 +15,7 @@ const initialState = {
     users : [],
     loading: false,
     sortParams: {
-        key : "first_name",
+        key : "",
         order : "asc",
         type : "string"
     },
@@ -34,7 +30,7 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
     switch(action.type) {
         case ADD_USER : 
-            return {...state, users:[...state.users, action.payload], loading:false, editingUser: undefined, filteredUsersNum : state.users.length}
+            return {...state, users:[...state.users, action.payload], loading:false, editingUser: undefined, filteredUsersNum : state.users.length, searchTerm: ""}
         case GET_USERS : 
             //console.log(action.payload);
             return {...state, users:[...action.payload], loading:false, editingUser: undefined}
@@ -52,7 +48,7 @@ const userReducer = (state = initialState, action) => {
         case EDITING_USER:
             return {...state, editingUser: action.editingUser};
         case EDIT_USER:
-            return {...state, editingUser: undefined};
+            return {...state, editingUser: undefined, searchTerm: ""};
         case SEARCH_USERS:
             return {...state, searchTerm: action.value, loading: false}
         case CHANGE_USERS_NUM:

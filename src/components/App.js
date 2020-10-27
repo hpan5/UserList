@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
-import Home from './Home';
-import AddNewUser from './AddNewUser';
-import EditUser from './EditUser';
+import Home from '../containers/Home';
+import AddNewUser from '../containers/AddNewUser';
+import EditUser from '../containers/EditUser';
 import {BrowserRouter as Router,  Route } from 'react-router-dom';
 class App extends Component{
 	render(){
