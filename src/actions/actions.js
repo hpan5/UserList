@@ -64,7 +64,7 @@ export const setSortParams = (sortKey, order, sortType = "string") => {
 };
 
 export const paginate = (pageNum) => {
-    console.log("current page " + pageNum);
+    //console.log("current page " + pageNum);
     return {
         type: PAGENATION,
         pageNum: pageNum
@@ -93,9 +93,9 @@ export const deleteUser = (id) => async dispatch => {
 export const editUser = (id, user) => async dispatch => {
     try{
         await axios.patch(apiUrl + 'update/' + id, user).then(response => async dispatch => {
-            console.log("user editted");
+            //console.log("user editted");
             await getUsers();
-            console.log("user reloaded");
+            //console.log("user reloaded");
             console.log(response);
         });
         
@@ -117,7 +117,7 @@ export const getUsers = () => async dispatch => {
         dispatch(loading());
         const res = await axios.get(apiUrl + 'posts' )
         
-        console.log("getting users:", res.data);
+        //console.log("getting users:", res.data);
         dispatch( {
             type: GET_USERS,
             payload: res.data
@@ -137,9 +137,23 @@ export const loading = () => {
         type: LOADING
     }
 }
-export const startEdit = (user) => {
-    return {
-        type: EDITING_USER,
-        editingUser: user
+export const startEdit = (id) => async dispatch => {
+    try {
+        await axios.get(apiUrl + 'get/' + id).then(response => {
+            //console.log("got editing user:" , response.data);
+            dispatch ({
+                type: EDITING_USER,
+                editingUser: response.data
+            });
+        });
+        
+    } catch(e) {
+        dispatch (
+            {
+                type: GET_USERS_ERROR,
+                payload: console.log(e)
+            }
+        )
     }
+        
 };

@@ -39,6 +39,7 @@ class Home extends Component{
 		let pageNum = this.getTotalPageNumber();
 		return(
 				<div className = 'container mt-5'>
+					<h2>Users</h2>
 					<Search/>
 					<table>
 						<thead>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import UserForm from './UserForm'
 import {connect} from 'react-redux';
 import * as actionCreator from '../actions/actions'
@@ -15,8 +15,9 @@ const findUserById = (users, id) => {
 
 const EditUser = (props) => {
     let id = props.match.params.id;
-    let user = findUserById(props.users, id);
-    props.startEdit(user);
+    useEffect(() => {
+        props.startEdit(id);
+    },[]);
     
     const submit = (user) => {
         let norepeat = {...user};
@@ -45,7 +46,7 @@ const mapDispatchToProps = (dispatch) => {
         onDelete: (id) => dispatch(actionCreator.deleteUser(id)),
         onCreate: (user) => dispatch(actionCreator.addUser(user)),
         onEdit: (id, user) => dispatch(actionCreator.editUser(id, user)),
-        startEdit: (user) => dispatch(actionCreator.startEdit(user)),
+        startEdit: (id) => dispatch(actionCreator.startEdit(id)),
         onLoad: () => dispatch(actionCreator.getUsers())
 	};
 }

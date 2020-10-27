@@ -8,7 +8,7 @@ import '../Styles/TableBody.css'
 const TableBody = ({ userList, usersPerPage, currentPage, onDelete, searchTerm, changeUserNum}) => {
     let history = useHistory();
     let filteredUserList = userList;
-    console.log("filteredUserList: " ,  filteredUserList);
+    //console.log("filteredUserList: " ,  filteredUserList);
     if (searchTerm !== "") {
         if (userList) {
             filteredUserList = userList.filter((user) => (
@@ -23,7 +23,7 @@ const TableBody = ({ userList, usersPerPage, currentPage, onDelete, searchTerm, 
     let indexOfLastUser = currentPage * usersPerPage;
     let indexOfFirstUser = indexOfLastUser - usersPerPage;
     const userSlice = filteredUserList.slice(indexOfFirstUser, indexOfLastUser);
-    console.log("userSlice: " ,  userSlice);
+    //console.log("userSlice: " ,  userSlice);
     return (
         <tbody>
             {userSlice.map((user, i) => 
