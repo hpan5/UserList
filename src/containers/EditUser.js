@@ -4,27 +4,18 @@ import {connect} from 'react-redux';
 import * as actionCreator from '../actions/actions'
 import '../Styles/AddEditUser.css'
 
-const findUserById = (users, id) => {
-    for (let i = 0; i < users.length; i++){
-        console.log(users[i]);
-        if (users[i].id === id) {
-            return users[i];
-        }
-    }
-}
-
 const EditUser = (props) => {
     let id = props.match.params.id;
     useEffect(() => {
-        props.startEdit(id);
-    },[]);
+        props.startEdit(props.match.params.id);
+    });
     
     const submit = (user) => {
         let norepeat = {...user};
         delete norepeat.repeat;
-        props.onEdit(id, norepeat);
-        props.onLoad();
-        props.history.goBack();
+        props.onEdit(id, norepeat, props.history).then(() => {
+            props.history.goBack();
+        })
     }
     
     return (
@@ -45,9 +36,10 @@ const mapDispatchToProps = (dispatch) => {
 	return {
         onDelete: (id) => dispatch(actionCreator.deleteUser(id)),
         onCreate: (user) => dispatch(actionCreator.addUser(user)),
-        onEdit: (id, user) => dispatch(actionCreator.editUser(id, user)),
+        onEdit: (id, user, history) => dispatch(actionCreator.newEdit(id, user, history)),
         startEdit: (id) => dispatch(actionCreator.startEdit(id)),
-        onLoad: () => dispatch(actionCreator.getUsers())
+        onLoad: () => dispatch(actionCreator.getUsers()),
+        restoreHomePage: (history) => dispatch(actionCreator.retoreHomePage(history))
 	};
 }
 export default connect(mapStateToProps, mapDispatchToProps) (EditUser);

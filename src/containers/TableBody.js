@@ -1,16 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as actionCreator from '../actions/actions'
 import { getSortedUsersList} from "../selectors";
 import {connect} from 'react-redux';
-import { useHistory } from "react-router-dom";
-import '../Styles/TableBody.css'
-
-const TableBody = ({ userList, usersPerPage, currentPage, onDelete, searchTerm, changeUserNum}) => {
-    let history = useHistory();
-    let filteredUserList = userList;
-    //console.log("filteredUserList: " ,  filteredUserList);
-    if (searchTerm !== "") {
-        if (userList) {
+import '../Styles/TableBody.css';
+import { withRouter, useHistory } from 'react-router-dom';
+/*
+f (userList) {
             filteredUserList = userList.filter((user) => (
                 (user !== undefined) && (user.first_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                 user.last_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -18,8 +13,30 @@ const TableBody = ({ userList, usersPerPage, currentPage, onDelete, searchTerm, 
                 user.age.includes(searchTerm))
             ));
         }
+*/
+const TableBody = ({ userList, usersPerPage, currentPage, onDelete, startEdit, searchTerm, changeUserNum }) => {
+    let history = useHistory();
+    let filteredUserList = userList;
+    //console.log("filteredUserList: " ,  filteredUserList);
+    if (searchTerm !== "") {
+        if (userList) {
+            filteredUserList = userList.filter((user) => (
+                (user !== undefined) && (Object.values(user).join(' ').toLowerCase().includes(searchTerm.toLowerCase()))
+            ));
+            //console.log("in HomePage:" + filteredUserList.length + "");
+            //changeUserNum(filteredUserList.length);
+        }
     }
-    changeUserNum(filteredUserList.length);
+    //changeUserNum(filteredUserList.length);
+    useEffect(() => {
+        //console.log("did mount:" + filteredUserList.length);
+        changeUserNum(filteredUserList.length);
+    });
+    
+    /*let tatoalPageNum = Math.ceil(filteredUserList.length / usersPerPage);
+    if (currentPage > tatoalPageNum) {
+        actionCreator.paginate(tatoalPageNum);
+    }*/
     let indexOfLastUser = currentPage * usersPerPage;
     let indexOfFirstUser = indexOfLastUser - usersPerPage;
     const userSlice = filteredUserList.slice(indexOfFirstUser, indexOfLastUser);
@@ -28,7 +45,7 @@ const TableBody = ({ userList, usersPerPage, currentPage, onDelete, searchTerm, 
         <tbody>
             {userSlice.map((user, i) => 
                 <tr className="users" key={user.id}>
-                    <td onClick={() => history.push(`/editUser/${user.id}`)}> Edit</td>
+                    <td onClick={() => handleStartEditClick(startEdit, history, user.id)}> Edit</td>
                     <td onClick={() => onDelete(user.id)}>Delete</td>
                     <td> {user.first_name} </td>
                     <td> {user.last_name} </td>
@@ -40,6 +57,13 @@ const TableBody = ({ userList, usersPerPage, currentPage, onDelete, searchTerm, 
     );
   }
 
+const handleStartEditClick = (startEdit, history, id) => {
+    startEdit(id).then(
+        () => {
+            history.push(`/editUser/${id}`);
+        }
+    )
+}
 
 const mapStateToProps = (state) => {
     return {
@@ -59,4 +83,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) (TableBody);
+export default connect(mapStateToProps, mapDispatchToProps) (withRouter(TableBody));

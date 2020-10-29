@@ -8,9 +8,9 @@ import {
     SET_SORT_PARAMS,
     PAGENATION,
     SEARCH_USERS,
-    CHANGE_USERS_NUM
+    CHANGE_USERS_NUM,
+    RETORE_HOME_PAGE
 } from '../actions/actionTypes';
-
 const initialState = {
     users : [],
     loading: false,
@@ -32,14 +32,16 @@ const userReducer = (state = initialState, action) => {
         case ADD_USER : 
             return {...state, users:[...state.users, action.payload], loading:false, editingUser: undefined, filteredUsersNum : state.users.length}
         case GET_USERS : 
-            //console.log(action.payload);
             return {...state, users:[...action.payload], loading:false, editingUser: undefined}
         case LOADING : 
             return {...state, loading:true}
         case DELETE_USER : 
-            //console.log("deleting");
             const filteredUsers = state.users.filter(user => user.id !== action.id)
-            return {...state, users: filteredUsers, loading:false, filteredUsersNum : filteredUsers.length}
+            let totalPage = Math.ceil((state.filteredUsersNum - 1) / state.usersPerPage);
+            let curPage = state.currentPage > totalPage ? totalPage : state.currentPage;
+            //console.log("curPage while deleting" + curPage);
+            //console.log("filteredUsers.length" + filteredUsers.length);
+            return {...state, users: filteredUsers, loading:false, filteredUsersNum : filteredUsers.length, currentPage : curPage}
         case SET_SORT_PARAMS:
             action.payload.data.order = state.sortParams.order === "desc" ? "asc" : "desc";
           return { ...state, sortParams: action.payload.data, editingUser: undefined };
@@ -50,9 +52,12 @@ const userReducer = (state = initialState, action) => {
         case EDIT_USER:
             return {...state, editingUser: undefined};
         case SEARCH_USERS:
-            return {...state, searchTerm: action.value, loading: false}
+            return {...state, searchTerm: action.value, loading: false};
         case CHANGE_USERS_NUM:
-            return {...state, filteredUsersNum: action.userNum}
+            //console.log("in changing user num" + action.userNum);
+            return {...state, filteredUsersNum: action.userNum};
+        case RETORE_HOME_PAGE:
+            return {...state};
         default:
             return state;
     }

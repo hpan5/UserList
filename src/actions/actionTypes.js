@@ -22,3 +22,5 @@ export const SEARCH_USERS = "SEARCH_USERS"
 export const PAGENATION = "PAGENATION"
 
 export const CHANGE_USERS_NUM = "CHANGE_USERS_NUM"
+
+export const RETORE_HOME_PAGE = "RETORE_HOME_PAGE"

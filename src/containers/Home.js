@@ -1,16 +1,20 @@
 import React,{Component} from 'react';
 import '../Styles/Home.css';
 import {connect} from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, useHistory } from 'react-router-dom';
 import { getSortedUsersList, sortSelector } from "../selectors";
 import * as actionCreator from '../actions/actions';
 import TableBody from './TableBody';
 import Search from './Seach'
+
+
 const Button = props => {
+	const history = useHistory();
     return (
       <button
         onClick={() => {
-			props.history.push('/createUser');
+			//console.log("creating new user:" , history);
+			history.push('/createUser');
         }}>
         Create New User
       </button>
@@ -62,7 +66,6 @@ class Home extends Component{
 					<WithRouterButton/>
 					
 				</div>
-			
 		);
 	}
 }
